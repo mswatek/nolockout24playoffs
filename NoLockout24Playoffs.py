@@ -10,7 +10,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 #from time import strftime, localtime
 
-#st.set_page_config(layout="wide",page_title="No Lockout! - 2024 Playoffs")
+st.set_page_config(layout="wide",page_title="No Lockout! - 2024 Playoffs")
 st.title(":blue[No More Lockouts in MLB! - 2024 Playoffs]")
 
 
@@ -221,6 +221,8 @@ def scores(df):
     if Total>10: df['Total'] = df['Total']-((Total-10)/2)
     else: df['Total'] = df['Total']
 
+    df['Total'] = df['Total'].round(2)
+
     cols = ['OB/PA','R','HR','RBI','SB', 'OBP', 'Innings', 'K', 'ERA', 'WHIP', 'QS','SV+H','Total']
     df = df[cols]
 
@@ -230,18 +232,20 @@ matchup1, matchup2, matchup3, matchup4, matchup5, matchup6 = [scores(df) for df 
 
 
 st.header("~~~~~~~~ Championship Bracket ~~~~~~~~")
-st.write(matchup1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
-        .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
-st.write(matchup2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
-         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
-st.write(matchup3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(matchup1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+        .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}),use_container_width=True)
+st.dataframe(matchup2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}),use_container_width=True)
+st.dataframe(matchup3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
          .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
 st.header("~~~~~~~~ Consoloation Bracket ~~~~~~~~")
-st.write(matchup4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(matchup4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
          .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
-st.write(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
          .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
-st.write(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
          .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0).format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}"}))
 
-    
+
+
+st.dataframe(indi_worst,hide_index=True,use_container_width=True)
