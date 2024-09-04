@@ -181,7 +181,7 @@ for index, row in all_weeks.iterrows():
 
 df_semis = all_weeks.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
 
-cat_cols = [col for col in df_semis.columns if col in ["R","HR","RBI","SB","K","QS","SV+H","OB","PA"]]
+cat_cols = [col for col in df_semis.columns if col in ["R","HR","RBI","SB","K","QS","SV+H","OnBase","PA"]]
 
 for col in cat_cols:
     df_semis[col] = df_semis[col].astype('int')
@@ -249,5 +249,3 @@ st.dataframe(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB'
 st.dataframe(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
-
-st.dataframe(indi_worst,hide_index=True,use_container_width=True)
