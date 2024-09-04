@@ -10,7 +10,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 #from time import strftime, localtime
 
-st.set_page_config(layout="wide",page_title="No Lockout! - 2024 Playoffs")
+#st.set_page_config(layout="wide",page_title="No Lockout! - 2024 Playoffs")
 st.title(":blue[No More Lockouts in MLB! - 2024 Playoffs]")
 
 
