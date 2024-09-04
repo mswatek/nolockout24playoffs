@@ -134,8 +134,17 @@ all_weeks[['H', 'AB']] = all_weeks['H/AB'].str.split('/', expand=True)
 ##### FIX PITCHING CATEGORIES #####
 
 all_weeks.IP = pd.to_numeric(all_weeks.IP, errors="ignore")
+all_weeks['IP'] = all_weeks['IP'].astype('str')
+
+all_weeks['IP'] = all_weeks.apply(lambda x: 0 if x['IP'] == '{}' else x['IP'], axis=1) 
+all_weeks.IP = pd.to_numeric(all_weeks.IP, errors="ignore")
+
 all_weeks['ERA'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['ERA'], axis=1) 
 all_weeks['WHIP'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['WHIP'], axis=1) 
+all_weeks['K'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['K'], axis=1) 
+all_weeks['QS'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['QS'], axis=1) 
+all_weeks['SV+H'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['SV+H'], axis=1) 
+
 
 
 all_weeks['IP_DECIMAL'] = (all_weeks['IP'] - np.fix(all_weeks['IP']))*10/3
@@ -249,3 +258,4 @@ st.dataframe(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB'
 st.dataframe(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+
