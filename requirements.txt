@@ -1,0 +1,8 @@
+yahoofantasy
+streamlit
+pandas
+numpy
+plotly.express
+datetime
+seaborn
+gspread
