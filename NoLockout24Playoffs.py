@@ -239,7 +239,7 @@ st.dataframe(matchup2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB'
 st.dataframe(matchup3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
-st.header("~~~~~~~~ Consoloation Bracket ~~~~~~~~")
+st.header("~~~~~~~~ Consolation Bracket ~~~~~~~~")
 st.dataframe(matchup4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
