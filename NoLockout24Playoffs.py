@@ -175,6 +175,7 @@ for col in cat_cols2:
 all_weeks['OnBase'] = (all_weeks['OBP']*all_weeks['AB']-all_weeks['H'])/(1-all_weeks['OBP'])+all_weeks['H']
 all_weeks['PA'] = (all_weeks['OBP']*all_weeks['AB']-all_weeks['H'])/(1-all_weeks['OBP'])+all_weeks['AB']
 
+
 all_weeks['OnBase'] = all_weeks['OnBase'].astype(int)
 all_weeks['PA'] = all_weeks['PA'].astype(int)
 
@@ -183,6 +184,12 @@ for index, row in all_weeks.iterrows():
         all_weeks.at[index,'OnBase'] = all_weeks.at[index,'OnBase']+1
         all_weeks.at[index,'PA'] = all_weeks.at[index,'PA']+2
         all_weeks.at[index,'OBP_New'] = all_weeks.at[index,'OnBase']/all_weeks.at[index,'PA']
+
+
+#cols = ['Week','R','HR','RBI','SB', 'OBP', 'K', 'ERA', 'WHIP', 'QS','SV+H']
+#df_individual = all_weeks[cols]
+#df_individual.index.names = ['Team']
+
 
 ##### SEMIFINALS #####
 ##### SEMIFINALS #####
@@ -199,11 +206,23 @@ df_semis['ERA'] = df_semis['Earned_Runs']/df_semis['Innings']*9
 df_semis['WHIP'] = df_semis['Walk_Hits']/df_semis['Innings']
 df_semis['OBP'] = df_semis['OnBase']/df_semis['PA']
 
-df_semis['OB/PA'] = df_semis['OnBase'].astype(str)+"/"+ df_semis['PA'].astype(str)
 
-cols = ['OB/PA','R','HR','RBI','SB', 'OBP', 'Innings', 'K', 'ERA', 'WHIP', 'QS','SV+H']
+df_week22 = all_weeks[all_weeks['Week']==22]
+cols = ['Team','AB','Innings']
+df_week22 = df_week22[cols]
+df_week22.set_index('Team')
+df_week22 = df_week22.rename(columns={'Innings':'Innings_Current'})
+
+df_semis = df_semis.merge(df_week22, left_index=True,right_on='Team')
+
+df_semis['OB/PA'] = df_semis['OnBase'].astype(str)+"/"+ df_semis['PA'].astype(str)+" (Current AB: "+df_semis['AB'].astype(str)+")"
+df_semis['Innings'] = round(df_semis['Innings'],2).astype(str)+" (Current IP: "+ round(df_semis['Innings_Current'],2).astype(str)+")"
+
+
+cols = ['Team','OB/PA','R','HR','RBI','SB', 'OBP', 'Innings', 'K', 'ERA', 'WHIP', 'QS','SV+H']
 df_semis = df_semis[cols]
-df_semis.index.names = ['Team']
+df_semis.set_index('Team',inplace=True)
+
 
 ##### set up all matchups
 matchup1 = df_semis[df_semis.index.isin(['Lumberjacks','Bryzzo'])]
@@ -241,21 +260,20 @@ matchup1, matchup2, matchup3, matchup4, matchup5, matchup6 = [scores(df) for df 
 st.header("~~~~~~~~ Championship Bracket ~~~~~~~~")
 st.dataframe(matchup1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.dataframe(matchup2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.dataframe(matchup3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.header("~~~~~~~~ Consolation Bracket ~~~~~~~~")
 st.dataframe(matchup4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.dataframe(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.dataframe(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Innings': "{:.2f}",'Total': "{:.1f}"}),use_container_width=True)
-
+        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
