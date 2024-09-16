@@ -279,13 +279,13 @@ df_finals['WHIP'] = df_finals['Walk_Hits']/df_finals['Innings']
 df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
 
 
-df_week22 = all_weeks[all_weeks['Week']==22]
+df_week24 = all_weeks[all_weeks['Week']==24]
 cols = ['Team','AB','Innings']
-df_week22 = df_week22[cols]
-df_week22.set_index('Team')
-df_week22 = df_week22.rename(columns={'Innings':'Innings_Current'})
+df_week24 = df_week24[cols]
+df_week24.set_index('Team')
+df_week24 = df_week24.rename(columns={'Innings':'Innings_Current'})
 
-df_finals = df_finals.merge(df_week22, left_index=True,right_on='Team')
+df_finals = df_finals.merge(df_week24, left_index=True,right_on='Team')
 
 df_finals['OB/PA'] = df_finals['OnBase'].astype(str)+"/"+ df_finals['PA'].astype(str)+" (Current AB: "+df_finals['AB'].astype(str)+")"
 df_finals['Innings'] = round(df_finals['Innings'],2).astype(str)+" (Current IP: "+ round(df_finals['Innings_Current'],2).astype(str)+")"
