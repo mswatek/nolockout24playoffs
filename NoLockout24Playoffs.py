@@ -197,7 +197,7 @@ for index, row in all_weeks.iterrows():
 ##### SEMIFINALS #####
 ##### SEMIFINALS #####
 
-df_semis = all_weeks[all_weeks['Week'].isin([23,24])]
+df_semis = all_weeks[all_weeks['Week'].isin([21,22])]
 
 df_semis = df_semis.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
 
@@ -265,7 +265,7 @@ semi1, semi2, semi3, semi4, semi5, semi6 = [scores(df) for df in (semi1, semi2, 
 ##### CHAMPIONSHIP #####
 ##### CHAMPIONSHIP #####
 
-df_finals = all_weeks[all_weeks['Week'].isin([21,22])]
+df_finals = all_weeks[all_weeks['Week'].isin([23,24])]
 
 df_finals = df_finals.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
 
