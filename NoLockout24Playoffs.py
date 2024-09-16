@@ -197,7 +197,7 @@ for index, row in all_weeks.iterrows():
 ##### SEMIFINALS #####
 ##### SEMIFINALS #####
 
-df_semis = all_weeks[all_weeks['Week'].isin([21,22])]
+df_semis = all_weeks[all_weeks['Week'].isin([23,24])]
 
 df_semis = df_semis.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
 
@@ -260,27 +260,93 @@ def scores(df):
 
 semi1, semi2, semi3, semi4, semi5, semi6 = [scores(df) for df in (semi1, semi2, semi3, semi4, semi5, semi6)]
 
+
+##### CHAMPIONSHIP #####
+##### CHAMPIONSHIP #####
+##### CHAMPIONSHIP #####
+
+df_finals = all_weeks[all_weeks['Week'].isin([21,22])]
+
+df_finals = df_finals.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
+
+cat_cols = [col for col in df_finals.columns if col in ["R","HR","RBI","SB","K","QS","SV+H","OnBase","PA"]]
+
+for col in cat_cols:
+    df_finals[col] = df_finals[col].astype('int')
+
+df_finals['ERA'] = df_finals['Earned_Runs']/df_finals['Innings']*9
+df_finals['WHIP'] = df_finals['Walk_Hits']/df_finals['Innings']
+df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
+
+
+df_week22 = all_weeks[all_weeks['Week']==22]
+cols = ['Team','AB','Innings']
+df_week22 = df_week22[cols]
+df_week22.set_index('Team')
+df_week22 = df_week22.rename(columns={'Innings':'Innings_Current'})
+
+df_finals = df_finals.merge(df_week22, left_index=True,right_on='Team')
+
+df_finals['OB/PA'] = df_finals['OnBase'].astype(str)+"/"+ df_finals['PA'].astype(str)+" (Current AB: "+df_finals['AB'].astype(str)+")"
+df_finals['Innings'] = round(df_finals['Innings'],2).astype(str)+" (Current IP: "+ round(df_finals['Innings_Current'],2).astype(str)+")"
+
+
+cols = ['Team','OB/PA','R','HR','RBI','SB', 'OBP', 'Innings', 'K', 'ERA', 'WHIP', 'QS','SV+H']
+df_finals = df_finals[cols]
+df_finals.set_index('Team',inplace=True)
+
+
+##### set up all matchups
+final1 = df_finals[df_finals.index.isin(['Lumberjacks','I Shota The Sheriff'])]
+final2 = df_finals[df_finals.index.isin(['Bryzzo','Aluminum Power'])]
+final3 = df_finals[df_finals.index.isin(['Santos L. Halper','Acuña Moncada'])]
+final4 = df_finals[df_finals.index.isin(['Frozen Ropes','El Squeezo Bunto Dos'])]
+
+
+def scores(df):
+    max_val = df[['R','HR','RBI','SB','OBP','K','QS','SV+H']].max(axis=0)
+    count_max = df.eq(max_val, axis=1).sum(axis=1).reset_index(name ='Total')
+
+    min_val = df[['ERA','WHIP']].min(axis=0)
+    count_min = df.eq(min_val, axis=1).sum(axis=1).reset_index(name ='Total')
+
+    total_1 = pd.concat([count_max,count_min])
+    total_1 = total_1.groupby(['Team'])[["Total"]].apply(lambda x : x.astype(int).sum())
+
+    df = df.merge(total_1, left_on='Team', right_on='Team')
+
+    Total = df['Total'].sum()
+    if Total>10: df['Total'] = df['Total']-((Total-10)/2)
+    else: df['Total'] = df['Total']
+
+    cols = ['OB/PA','R','HR','RBI','SB', 'OBP', 'Innings', 'K', 'ERA', 'WHIP', 'QS','SV+H','Total']
+    df = df[cols]
+
+    return df
+
+final1, final2, final3, final4 = [scores(df) for df in (final1, final2, final3, final4)]
+
+##### PRINT MATCHUPS #####
+##### PRINT MATCHUPS #####
+##### PRINT MATCHUPS #####
+
+
 with tab1:
     st.header("~~~~~~~~ Championship Bracket ~~~~~~~~")
-    st.dataframe(semi1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+    st.dataframe(final1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-    st.dataframe(semi2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
-        .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-    st.dataframe(semi3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+    st.dataframe(final2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
     st.header("~~~~~~~~ Consolation Bracket ~~~~~~~~")
-    st.dataframe(semi4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+    st.dataframe(final3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-    st.dataframe(semi5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+    st.dataframe(final4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-    st.dataframe(semi6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
-        .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
-        .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
+
 
 
 with tab2:
