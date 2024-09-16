@@ -84,7 +84,7 @@ except Exception:
 @st.cache_data(ttl=3600)
 def load_data():
     all_weeks=pd.DataFrame()
-    for i in range(20,22):
+    for i in range(20,23):
         week = league.weeks()[i]
         df = pd.DataFrame({'Team':[],'Opponent':[], 'cat':[], 'stat':[]})
         df2 = pd.DataFrame({'Team':[], 'Opponent':[],'cat':[], 'stat':[]})
@@ -195,7 +195,9 @@ for index, row in all_weeks.iterrows():
 ##### SEMIFINALS #####
 ##### SEMIFINALS #####
 
-df_semis = all_weeks.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
+df_semis = all_weeks[all_weeks['Week'].isin(21,22)]
+
+df_semis = df_semis.groupby(['Team'])[["OnBase", "PA","R","HR","RBI","SB","Innings","Earned_Runs","Walk_Hits","K","QS","SV+H"]].apply(lambda x : x.sum())
 
 cat_cols = [col for col in df_semis.columns if col in ["R","HR","RBI","SB","K","QS","SV+H","OnBase","PA"]]
 
