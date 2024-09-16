@@ -227,12 +227,12 @@ df_semis.set_index('Team',inplace=True)
 
 
 ##### set up all matchups
-matchup1 = df_semis[df_semis.index.isin(['Lumberjacks','Bryzzo'])]
-matchup2 = df_semis[df_semis.index.isin(['I Shota The Sheriff','Aluminum Power'])]
-matchup3 = df_semis[df_semis.index.isin(['Humdingers',"Baseball GPT"])]
-matchup4 = df_semis[df_semis.index.isin(['Santos L. Halper',"El Squeezo Bunto Dos"])]
-matchup5 = df_semis[df_semis.index.isin(['Frozen Ropes','Acuña Moncada'])]
-matchup6 = df_semis[df_semis.index.isin(['The Chandler Mandrills','Sheangels'])]
+semi1 = df_semis[df_semis.index.isin(['Lumberjacks','Bryzzo'])]
+semi2 = df_semis[df_semis.index.isin(['I Shota The Sheriff','Aluminum Power'])]
+semi3 = df_semis[df_semis.index.isin(['Humdingers',"Baseball GPT"])]
+semi4 = df_semis[df_semis.index.isin(['Santos L. Halper',"El Squeezo Bunto Dos"])]
+semi5 = df_semis[df_semis.index.isin(['Frozen Ropes','Acuña Moncada'])]
+semi6 = df_semis[df_semis.index.isin(['The Chandler Mandrills','Sheangels'])]
 
 
 def scores(df):
@@ -256,26 +256,26 @@ def scores(df):
 
     return df
 
-matchup1, matchup2, matchup3, matchup4, matchup5, matchup6 = [scores(df) for df in (matchup1, matchup2, matchup3, matchup4, matchup5, matchup6)]
+semi1, semi2, semi3, semi4, semi5, semi6 = [scores(df) for df in (semi1, semi2, semi3, semi4, semi5, semi6)]
 
 
 st.header("~~~~~~~~ Championship Bracket ~~~~~~~~")
-st.dataframe(matchup1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi1.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-st.dataframe(matchup2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi2.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-st.dataframe(matchup3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi3.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
 st.header("~~~~~~~~ Consolation Bracket ~~~~~~~~")
-st.dataframe(matchup4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi4.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-st.dataframe(matchup5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi5.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-st.dataframe(matchup6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
+st.dataframe(semi6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
