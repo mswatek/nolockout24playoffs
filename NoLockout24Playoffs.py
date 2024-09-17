@@ -86,7 +86,7 @@ except Exception:
 @st.cache_data(ttl=3600)
 def load_data():
     all_weeks=pd.DataFrame()
-    for i in range(20,23):
+    for i in range(20,24):
         week = league.weeks()[i]
         df = pd.DataFrame({'Team':[],'Opponent':[], 'cat':[], 'stat':[]})
         df2 = pd.DataFrame({'Team':[], 'Opponent':[],'cat':[], 'stat':[]})
@@ -279,13 +279,9 @@ df_finals['WHIP'] = df_finals['Walk_Hits']/df_finals['Innings']
 df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
 
 
-df_week24 = all_weeks[all_weeks['Week']=='24']
+df_week24 = all_weeks[all_weeks['Week']==24]
 
-st.write(all_weeks)
-st.write(df_week24)
-st.write(df_finals)
 
-'''
 cols = ['Team','AB','Innings']
 df_week24 = df_week24[cols]
 df_week24.set_index('Team')
@@ -376,4 +372,3 @@ with tab2:
     st.dataframe(semi6.style.highlight_max(subset = ['Total','R','HR','RBI', 'SB', 'OBP', 'K', 'QS', 'SV+H'], color = 'lightgreen', axis = 0)
         .highlight_min(subset = ['ERA','WHIP'], color = 'lightgreen', axis = 0)
         .format({'ERA': "{:.2f}",'WHIP': "{:.2f}",'OBP': "{:.3f}",'Total': "{:.1f}"}),use_container_width=True)
-'''
