@@ -279,7 +279,7 @@ df_finals['WHIP'] = df_finals['Walk_Hits']/df_finals['Innings']
 df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
 
 
-df_week24 = all_weeks[all_weeks['Week']==24]
+df_week24 = all_weeks[all_weeks['Week']=='24']
 
 st.write(df_week24)
 st.write(df_finals)
