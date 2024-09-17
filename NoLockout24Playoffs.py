@@ -281,6 +281,7 @@ df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
 
 df_week24 = all_weeks[all_weeks['Week']=='24']
 
+st.write(all_weeks)
 st.write(df_week24)
 st.write(df_finals)
 
