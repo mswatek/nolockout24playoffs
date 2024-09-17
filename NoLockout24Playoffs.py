@@ -135,11 +135,11 @@ all_weeks[['H', 'AB']] = all_weeks['H/AB'].str.split('/', expand=True)
 ##### FIX PITCHING CATEGORIES #####
 ##### FIX PITCHING CATEGORIES #####
 
-all_weeks.IP = pd.to_numeric(all_weeks.IP)
+all_weeks.IP = pd.to_numeric(all_weeks.IP, errors='ignore')
 all_weeks['IP'] = all_weeks['IP'].astype('str')
 
 all_weeks['IP'] = all_weeks.apply(lambda x: 0 if x['IP'] == '{}' else x['IP'], axis=1) 
-all_weeks.IP = pd.to_numeric(all_weeks.IP)
+all_weeks.IP = pd.to_numeric(all_weeks.IP, errors='ignore')
 
 all_weeks['ERA'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['ERA'], axis=1) 
 all_weeks['WHIP'] = all_weeks.apply(lambda x: 0 if x['IP'] == 0 else x['WHIP'], axis=1) 
