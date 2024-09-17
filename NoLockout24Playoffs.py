@@ -280,8 +280,6 @@ df_finals['OBP'] = df_finals['OnBase']/df_finals['PA']
 
 
 df_week24 = all_weeks[all_weeks['Week']==24]
-
-
 cols = ['Team','AB','Innings']
 df_week24 = df_week24[cols]
 df_week24.set_index('Team')
